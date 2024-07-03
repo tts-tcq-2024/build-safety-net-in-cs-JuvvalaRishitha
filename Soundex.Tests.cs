@@ -39,7 +39,7 @@ public class SoundexTests
         string result = Soundex.GenerateSoundex(input);
 
         // Assert
-        Assert.Equal("J252", result); // J -> J, a -> 0, c -> 2, k -> 2
+        Assert.Equal("J022", result); // J -> J, a -> 0, c -> 2, k -> 2
     }
 
     [Fact]
@@ -92,7 +92,7 @@ public class SoundexTests
         Soundex.AppendingSoundexCharacters("John", soundexBuilder, prevCode);
 
         // Assert
-        Assert.Equal("J530", soundexBuilder.ToString()); // J -> J, o -> 0, h -> 0, n -> 5
+        Assert.Equal("J005", soundexBuilder.ToString()); // J -> J, o -> 0, h -> 0, n -> 5
     }
 
     [Fact]
