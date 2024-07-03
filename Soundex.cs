@@ -63,8 +63,5 @@ private char GetSoundexCode(char character)
          _ => '0'
      };
 }
-    static void Main()
-    {
-        string soundex = Soundex.GenerateSoundex("Smith");
-    }
+   
 }
