@@ -63,5 +63,5 @@ private char GetSoundexCode(char character)
          _ => '0'
      };
 }
-string soundexCode = GenerateSoundex("John");   
+  
 }
