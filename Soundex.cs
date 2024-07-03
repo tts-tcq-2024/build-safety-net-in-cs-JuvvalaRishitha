@@ -40,7 +40,7 @@ public static void Characters(char character, StringBuilder soundex, char prevCo
         prevCode = code;
     }
 }
-public bool AppendCode(char code, char prevCode) => code != 0 && code != prevCode;
+public static bool AppendCode(char code, char prevCode) => code != 0 && code != prevCode;
     
 public static void SoundexCode(StringBuilder soundex)
 {
