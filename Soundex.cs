@@ -29,14 +29,15 @@ private void AppendingSoundexCharacters(string name, StringBuilder soundex, char
     for (int i = 1; i < name.Length && soundex.Length < 4; i++)
     {
         char code = GetSoundexCode(name[i]);
-        if (code != '0' && code != prevCode)
+        if (AppendCode(code,prevCode))
         {
             soundex.Append(code);
             prevCode = code;
         }
     }
 }
-
+private bool AppendCode(char code, char prevCode) => code != 0 && code != prevCode;
+    
 private void Soundex(StringBuilder soundex)
 {
     while (soundex.Length < 4)
@@ -45,37 +46,18 @@ private void Soundex(StringBuilder soundex)
     }
 }
 
-    private static char GetSoundexCode(char c)
+    private char GetSoundexCode(char character)
     {
-        c = char.ToUpper(c);
-        switch (c)
+        character = char.ToUpper(character);
+        return character switch
         {
-            case 'B':
-            case 'F':
-            case 'P':
-            case 'V':
-                return '1';
-            case 'C':
-            case 'G':
-            case 'J':
-            case 'K':
-            case 'Q':
-            case 'S':
-            case 'X':
-            case 'Z':
-                return '2';
-            case 'D':
-            case 'T':
-                return '3';
-            case 'L':
-                return '4';
-            case 'M':
-            case 'N':
-                return '5';
-            case 'R':
-                return '6';
-            default:
-                return '0'; // For A, E, I, O, U, H, W, Y
-        }
+            'B' or 'F' or 'P' or 'V' => '1',
+            'C' or 'G' or 'J' or 'K' or 'Q' or 'S' or 'X' or 'Z' => '2',
+            'D' or 'T' => '3',
+            'L' => '4',
+            'M' or 'N' => '5',
+            'R' => '6',
+            _ => DefaultChar
+        };
     }
 }
