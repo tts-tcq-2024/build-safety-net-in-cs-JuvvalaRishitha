@@ -9,8 +9,9 @@ public static string GenerateSoundex(string name)
     {
         return string.Empty;
     }
+    Soundex instance = new Soundex();
     StringBuilder soundex = InitializeTheSoundex(name);
-    char prevCode = GetSoundexCode(name[0]);
+    char prevCode = instance.GetSoundexCode(name[0]);
 
     AppendingSoundexCharacters(name, soundex, prevCode);
     SoundexCode(soundex);
@@ -33,7 +34,8 @@ public static void AppendingSoundexCharacters(string name, StringBuilder soundex
 }
 public static void Characters(char character, StringBuilder soundex, char prevCode)
 {
-    char code = GetSoundexCode(character);
+    Soundex instance = new Soundex();
+    char code = instance.GetSoundexCode(character);
     if (AppendCode(code, prevCode))
     {
         soundex.Append(code);
