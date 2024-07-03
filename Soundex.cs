@@ -26,7 +26,7 @@ private StringBuilder InitializeTheSoundex(string name)
 
 private void AppendingSoundexCharacters(string name, StringBuilder soundex, char prevCode)
 {
-    for (int i = 1; i < name.Length && soundex.Length < MaxCodeLength; i++)
+    for (int i = 1; i < name.Length && soundex.Length < 4; i++)
     {
         Characters(name[i], soundex, prevCode);
     }
@@ -61,7 +61,7 @@ private void GenerateSoundex(StringBuilder soundex)
             'L' => '4',
             'M' or 'N' => '5',
             'R' => '6',
-            _ => DefaultChar
+            _ => 0
         };
     }
 }
