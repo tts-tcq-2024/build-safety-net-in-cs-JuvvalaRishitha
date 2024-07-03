@@ -13,7 +13,7 @@ public static string GenerateSoundex(string name)
     StringBuilder soundex = InitializeTheSoundex(name);
     char prevCode = GetSoundexCode(name[0]);
 
-    AppendingSoundexCharacters(name, soundex, prevCode);
+    AppendingSoundexCharacters(name, soundex, ref prevCode);
     SoundexCode(soundex);
     return soundex.ToString();
 }
@@ -25,14 +25,14 @@ public static StringBuilder InitializeTheSoundex(string name)
     return soundex;
 }
 
-public static void AppendingSoundexCharacters(string name, StringBuilder soundex, char prevCode)
+public static void AppendingSoundexCharacters(string name, StringBuilder soundex, ref char prevCode)
 {
     for (int i = 1; i < name.Length && soundex.Length < 4; i++)
     {
-        Characters(name[i], soundex, prevCode); 
+        Characters(name[i], soundex, ref prevCode); 
     }
 }
-public static void Characters(char character, StringBuilder soundex, char prevCode)
+public static void Characters(char character, StringBuilder soundex, ref char prevCode)
 {
    if(char.IsLetter(character))
     {
