@@ -17,21 +17,21 @@ public static string GenerateSoundex(string name)
     return soundex.ToString();
 }
 
-public StringBuilder InitializeTheSoundex(string name)
+public static StringBuilder InitializeTheSoundex(string name)
 {
     StringBuilder soundex = new StringBuilder();
     soundex.Append(char.ToUpper(name[0]));
     return soundex;
 }
 
-public void AppendingSoundexCharacters(string name, StringBuilder soundex, char prevCode)
+public static void AppendingSoundexCharacters(string name, StringBuilder soundex, char prevCode)
 {
     for (int i = 1; i < name.Length && soundex.Length < 4; i++)
     {
         Characters(name[i], soundex, prevCode);
     }
 }
-public void Characters(char character, StringBuilder soundex, char prevCode)
+public static void Characters(char character, StringBuilder soundex, char prevCode)
 {
     char code = GetSoundexCode(character);
     if (AppendCode(code, prevCode))
@@ -42,14 +42,14 @@ public void Characters(char character, StringBuilder soundex, char prevCode)
 }
 public bool AppendCode(char code, char prevCode) => code != 0 && code != prevCode;
     
-public void SoundexCode(StringBuilder soundex)
+public static void SoundexCode(StringBuilder soundex)
 {
     while (soundex.Length < 4)
     {
         soundex.Append(0);
     }
 }
-public char GetSoundexCode(char character)
+private char GetSoundexCode(char character)
 {
     character = char.ToUpper(character);
     return character switch
