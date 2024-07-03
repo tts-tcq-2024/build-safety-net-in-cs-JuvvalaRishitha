@@ -60,11 +60,12 @@ private char GetSoundexCode(char character)
         'L' => '4',
         'M' or 'N' => '5',
         'R' => '6',
-         => '0'
+         _ => '0'
      };
 }
 
 public static void Main(string[] args)
 {
     string soundexCode = GenerateSoundex("John");
+}
 }
