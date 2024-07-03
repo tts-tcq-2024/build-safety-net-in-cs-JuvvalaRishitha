@@ -3,12 +3,6 @@ using System;
 using System.Text;
 public class SoundexTests
 {
-  private readonly Soundex _soundex;
-   public SoundexTests()
-   {
-      _soundex = new Soundex();
-   }
-  
      [Fact]
     public void GenerateSoundex_EmptyString_ReturnsEmptyString()
     {
@@ -163,7 +157,7 @@ public class SoundexTests
         char character = 'B';
 
         // Act
-        char result = _soundex.GetSoundexCode(character);
+        char result = Soundex.GetSoundexCode(character);
 
         // Assert
         Assert.Equal('1', result);
@@ -176,7 +170,7 @@ public class SoundexTests
         char character = 'X';
 
         // Act
-        char result = _soundex.GetSoundexCode(character);
+        char result = Soundex.GetSoundexCode(character);
 
         // Assert
         Assert.Equal('2', result);
