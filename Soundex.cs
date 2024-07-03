@@ -3,7 +3,7 @@ using System.Text;
 
 public class Soundex
 {
-    public static string GenerateSoundex(string name)
+public static string GenerateSoundex(string name)
 {
     if(string.IsNullOrEmpty(name))
     {
@@ -13,7 +13,7 @@ public class Soundex
     char prevCode = GetSoundexCode(name[0]);
 
     AppendingSoundexCharacters(name, soundex, prevCode);
-    GenerateSoundex(soundex);
+    SoundexCode(soundex);
     return soundex.ToString();
 }
 
@@ -42,26 +42,29 @@ private void Characters(char character, StringBuilder soundex, char prevCode)
 }
 private bool AppendCode(char code, char prevCode) => code != 0 && code != prevCode;
     
-private void GenerateSoundex(StringBuilder soundex)
+private void SoundexCode(StringBuilder soundex)
 {
     while (soundex.Length < 4)
     {
         soundex.Append(0);
     }
 }
-
-    private char GetSoundexCode(char character)
+private char GetSoundexCode(char character)
+{
+    character = char.ToUpper(character);
+    return character switch
     {
-        character = char.ToUpper(character);
-        return character switch
-        {
-            'B' or 'F' or 'P' or 'V' => '1',
-            'C' or 'G' or 'J' or 'K' or 'Q' or 'S' or 'X' or 'Z' => '2',
-            'D' or 'T' => '3',
-            'L' => '4',
-            'M' or 'N' => '5',
-            'R' => '6',
-            _ => 0
-        };
-    }
+        'B' or 'F' or 'P' or 'V' => '1',
+        'C' or 'G' or 'J' or 'K' or 'Q' or 'S' or 'X' or 'Z' => '2',
+        'D' or 'T' => '3',
+        'L' => '4',
+        'M' or 'N' => '5',
+        'R' => '6',
+         => '0'
+     };
+}
+
+public static void Main(string[] args)
+{
+    string soundexCode = GenerateSoundex("John");
 }
