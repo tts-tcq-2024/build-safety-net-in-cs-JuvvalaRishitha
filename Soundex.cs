@@ -34,8 +34,8 @@ public static void AppendingSoundexCharacters(string name, StringBuilder soundex
 }
 public static void Characters(char character, StringBuilder soundex, char prevCode)
 {
-    Soundex instance = new Soundex();
-    char code = instance.GetSoundexCode(character);
+   
+    char code = GetSoundexCode(character);
     if (AppendCode(code, prevCode))
     {
         soundex.Append(code);
