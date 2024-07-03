@@ -63,9 +63,4 @@ private char GetSoundexCode(char character)
          _ => '0'
      };
 }
-
-public static void Main(string[] args)
-{
-    string soundexCode = Soundex.GenerateSoundex("John");
-}
 }
