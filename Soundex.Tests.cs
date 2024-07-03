@@ -3,7 +3,7 @@ using System;
 
 public class SoundexTests
 {
-
+  private readonly Soundex _soundex;
    public SoundexTests()
    {
       var _soundex = new Soundex();
