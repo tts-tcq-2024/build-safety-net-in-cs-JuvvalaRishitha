@@ -86,13 +86,13 @@ public class SoundexTests
     {
         // Arrange
         var soundexBuilder = new StringBuilder("J");
-        char prevCode = 'J';
+        char prevCode = '0';
 
         // Act
         Soundex.AppendingSoundexCharacters("John", soundexBuilder, ref prevCode);
 
         // Assert
-        Assert.Equal("J052", soundexBuilder.ToString()); 
+        Assert.Equal("J050", soundexBuilder.ToString()); 
     }
 
     [Fact]
