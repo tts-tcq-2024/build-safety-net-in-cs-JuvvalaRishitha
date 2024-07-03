@@ -29,22 +29,21 @@ public static void AppendingSoundexCharacters(string name, StringBuilder soundex
 {
     for (int i = 1; i < name.Length && soundex.Length < 4; i++)
     {
-        if(char.IsLetter(name[i))
-        {
-              Characters(name[i], soundex, prevCode);                    
-        }
-        
+        Characters(name[i], soundex, prevCode); 
     }
 }
 public static void Characters(char character, StringBuilder soundex, char prevCode)
 {
-   
-    char code = GetSoundexCode(character);
+   if(char.IsLetter(character)
+    {
+       char code = GetSoundexCode(character);
     if (AppendCode(code, prevCode))
     {
         soundex.Append(code);
         prevCode = code;
+    } 
     }
+    
 }
 public static bool AppendCode(char code, char prevCode) => code != 0 && code != prevCode;
     
