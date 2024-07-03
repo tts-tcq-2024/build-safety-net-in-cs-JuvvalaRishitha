@@ -199,7 +199,6 @@ public class SoundexTests
         // Assert
         Assert.Equal("J000", soundexBuilder.ToString());
     }
-}
     [Fact]
     public void HandlesEmptyString()
     {
