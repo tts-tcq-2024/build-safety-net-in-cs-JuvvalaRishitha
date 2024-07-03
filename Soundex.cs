@@ -26,14 +26,18 @@ private StringBuilder InitializeTheSoundex(string name)
 
 private void AppendingSoundexCharacters(string name, StringBuilder soundex, char prevCode)
 {
-    for (int i = 1; i < name.Length && soundex.Length < 4; i++)
+    for (int i = 1; i < name.Length && soundex.Length < MaxCodeLength; i++)
     {
-        char code = GetSoundexCode(name[i]);
-        if (AppendCode(code,prevCode))
-        {
-            soundex.Append(code);
-            prevCode = code;
-        }
+        Characters(name[i], soundex, prevCode);
+    }
+}
+private void Characters(char character, StringBuilder soundex, char prevCode)
+{
+    char code = GetSoundexCode(character);
+    if (AppendCode(code, prevCode))
+    {
+        soundex.Append(code);
+        prevCode = code;
     }
 }
 private bool AppendCode(char code, char prevCode) => code != 0 && code != prevCode;
