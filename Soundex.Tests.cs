@@ -86,7 +86,7 @@ public class SoundexTests
     {
         // Arrange
         var soundexBuilder = new StringBuilder("J");
-        char prevCode = '0';
+        char prevCode = 'J';
 
         // Act
         Soundex.AppendingSoundexCharacters("John", soundexBuilder, ref prevCode);
