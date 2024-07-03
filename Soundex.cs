@@ -29,7 +29,11 @@ public static void AppendingSoundexCharacters(string name, StringBuilder soundex
 {
     for (int i = 1; i < name.Length && soundex.Length < 4; i++)
     {
-        Characters(name[i], soundex, prevCode);
+        if(char.IsLetter(name[i))
+        {
+              Characters(name[i], soundex, prevCode);                    
+        }
+        
     }
 }
 public static void Characters(char character, StringBuilder soundex, char prevCode)
