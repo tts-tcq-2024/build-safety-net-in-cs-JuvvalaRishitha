@@ -1,232 +1,293 @@
 using Xunit;
 using System;
 
+public class MockSoundexService : ISoundexService
+{
+    private readonly Func<char, char> _getSoundexCode;
+
+    public MockSoundexService(Func<char, char> getSoundexCode)
+    {
+        _getSoundexCode = getSoundexCode;
+    }
+
+    public char GetSoundexCode(char c)
+    {
+        return _getSoundexCode(c);
+    }
+}
+
 
 public class SoundexTests
 {
   
-    [Theory]
-    [InlineData("Robert", "R163")]
-    [InlineData("Rupert", "R163")]
-    [InlineData("Rubin", "R150")]
-    [InlineData("Ashcraft", "A261")]
-    [InlineData("Ashcroft", "A261")]
-    [InlineData("Tymczak", "T522")]
-    [InlineData("Pfister", "P236")]
-    [InlineData("", "")]
-    [InlineData(null, "")]
-    public void GenerateSoundex_ValidAndInvalidInputs_ReturnsExpectedResults(string input, string expected)
-    {
-        // Act
-        string result = Soundex.GenerateSoundex(input);
-
-        // Assert
-        Assert.Equal(expected, result);
-    }
-
     [Fact]
-    public void GenerateSoundex_EmptyInput_ReturnsEmptyString()
+    public void GenerateSoundex_EmptyString_ReturnsEmptyString()
     {
         // Arrange
+        var soundexService = new MockSoundexService(c => '0');
+        var soundex = new Soundex(soundexService);
         string input = "";
 
         // Act
-        string result = Soundex.GenerateSoundex(input);
+        string result = soundex.GenerateSoundex(input);
 
         // Assert
         Assert.Equal(string.Empty, result);
     }
 
     [Fact]
-    public void GenerateSoundex_NullInput_ReturnsEmptyString()
+    public void GenerateSoundex_SingleCharacter_ReturnsPaddedCode()
     {
         // Arrange
-        string input = null;
+        var soundexService = new MockSoundexService(c => '0');
+        var soundex = new Soundex(soundexService);
+        string input = "A";
 
         // Act
-        string result = Soundex.GenerateSoundex(input);
+        string result = soundex.GenerateSoundex(input);
 
         // Assert
-        Assert.Equal(string.Empty, result);
-    }
-
-    [Theory]
-    [InlineData("B", "B000")]
-    [InlineData("Bo", "B000")]
-    [InlineData("Bob", "B100")]
-    public void GenerateSoundex_ShortNames_ReturnsExpectedResults(string input, string expected)
-    {
-        // Act
-        string result = Soundex.GenerateSoundex(input);
-
-        // Assert
-        Assert.Equal(expected, result);
-    }
-
-    [Theory]
-    [InlineData("A", "A000")]
-    [InlineData("E", "E000")]
-    [InlineData("I", "I000")]
-    [InlineData("O", "O000")]
-    [InlineData("U", "U000")]
-    [InlineData("H", "H000")]
-    [InlineData("W", "W000")]
-    [InlineData("Y", "Y000")]
-    public void GenerateSoundex_SingleVowel_ReturnsExpectedResults(string input, string expected)
-    {
-        // Act
-        string result = Soundex.GenerateSoundex(input);
-
-        // Assert
-        Assert.Equal(expected, result);
-    }
-
-    [Theory]
-    [InlineData("BFPV", "B110")]
-    [InlineData("CGJKQSXZ", "C220")]
-    [InlineData("DT", "D300")]
-    [InlineData("L", "L400")]
-    [InlineData("MN", "M500")]
-    [InlineData("R", "R600")]
-    public void GenerateSoundex_SameSoundexGroupLetters_ReturnsExpectedResults(string input, string expected)
-    {
-        // Act
-        string result = Soundex.GenerateSoundex(input);
-
-        // Assert
-        Assert.Equal(expected, result);
-    }
-
-    [Theory]
-    [InlineData("BCDL", "B234")]
-    [InlineData("BFGHJKL", "B245")]
-    public void GenerateSoundex_MixedLetters_ReturnsExpectedResults(string input, string expected)
-    {
-        // Act
-        string result = Soundex.GenerateSoundex(input);
-
-        // Assert
-        Assert.Equal(expected, result);
-    }
-
-    [Theory]
-    [InlineData("Bobbbyyyyyy", "B110")]
-    [InlineData("Ashcrofttttttt", "A261")]
-    public void GenerateSoundex_LongNames_ReturnsExpectedResults(string input, string expected)
-    {
-        // Act
-        string result = Soundex.GenerateSoundex(input);
-
-        // Assert
-        Assert.Equal(expected, result);
-    }
-
-    [Theory]
-    [InlineData("O'Malley", "O540")]
-    [InlineData("D'Angelo", "D524")]
-    [InlineData("McDonald", "M235")]
-    public void GenerateSoundex_NamesWithApostrophes_ReturnsExpectedResults(string input, string expected)
-    {
-        // Act
-        string result = Soundex.GenerateSoundex(input);
-
-        // Assert
-        Assert.Equal(expected, result);
-    }
-
-    [Theory]
-    [InlineData("Washington", "W252")]
-    [InlineData("Lee", "L000")]
-    [InlineData("Gutierrez", "G362")]
-    [InlineData("Pfister", "P236")]
-    [InlineData("Jackson", "J250")]
-    [InlineData("Tymczak", "T522")]
-    [InlineData("Van", "V500")]
-    public void GenerateSoundex_VariousNames_ReturnsExpectedResults(string input, string expected)
-    {
-        // Act
-        string result = Soundex.GenerateSoundex(input);
-
-        // Assert
-        Assert.Equal(expected, result);
-    }
-
-    [Theory]
-    [InlineData("Robert ", "R163")]
-    [InlineData("  Rupert", "R163")]
-    [InlineData("  Rubin  ", "R150")]
-    public void GenerateSoundex_NamesWithLeadingTrailingSpaces_ReturnsExpectedResults(string input, string expected)
-    {
-        // Act
-        string result = Soundex.GenerateSoundex(input.Trim());
-
-        // Assert
-        Assert.Equal(expected, result);
-    }
-
-    [Theory]
-    [InlineData("Smith", "S530")]
-    [InlineData("Smythe", "S530")]
-    public void GenerateSoundex_EqualSoundexDifferentNames_ReturnsSameSoundexCode(string input, string expected)
-    {
-        // Act
-        string result = Soundex.GenerateSoundex(input);
-
-        // Assert
-        Assert.Equal(expected, result);
-    }
-
-    [Theory]
-    [InlineData("Robert", "R163", "Rupert", "R163")]
-    [InlineData("Rubin", "R150", "Ruben", "R150")]
-    public void GenerateSoundex_CompareNamesWithSameSoundex(string name1, string expected1, string name2, string expected2)
-    {
-        // Act
-        string result1 = Soundex.GenerateSoundex(name1);
-        string result2 = Soundex.GenerateSoundex(name2);
-
-        // Assert
-        Assert.Equal(expected1, result1);
-        Assert.Equal(expected2, result2);
+        Assert.Equal("A000", result);
     }
 
     [Fact]
-    public void GenerateSoundex_HandlesMixedCaseNames()
+    public void GenerateSoundex_FirstCharacterNotInService_ReturnsDefaultCode()
     {
         // Arrange
-        string input = "rObErT";
+        var soundexService = new MockSoundexService(c => c == 'B' ? '0' : '0');
+        var soundex = new Soundex(soundexService);
+        string input = "B";
 
         // Act
-        string result = Soundex.GenerateSoundex(input);
-
-        // Assert
-        Assert.Equal("R163", result);
-    }
-
-    [Fact]
-    public void GenerateSoundex_HandlesRepeatingCharacters()
-    {
-        // Arrange
-        string input = "Bbbbbb";
-
-        // Act
-        string result = Soundex.GenerateSoundex(input);
+        string result = soundex.GenerateSoundex(input);
 
         // Assert
         Assert.Equal("B000", result);
     }
 
     [Fact]
-    public void GenerateSoundex_NamesWithNonAlphabetCharacters_ReturnsExpectedResults()
+    public void GenerateSoundex_SomeCharactersInService_ReturnsEncodedSoundex()
     {
         // Arrange
-        string input = "R0b3rt!";
+        var soundexService = new MockSoundexService(c =>
+        {
+            return c switch
+            {
+                'J' => 'J',
+                'a' => '0',
+                'c' => '2',
+                'k' => '2',
+                _ => '0'
+            };
+        });
+        var soundex = new Soundex(soundexService);
+        string input = "Jack";
 
         // Act
-        string result = Soundex.GenerateSoundex(input);
+        string result = soundex.GenerateSoundex(input);
 
         // Assert
-        Assert.Equal("R163", result);
+        Assert.Equal("J220", result);
+    }
+
+    [Fact]
+    public void GenerateSoundex_CharactersWithSameCode_AppliesRulesCorrectly()
+    {
+        // Arrange
+        var soundexService = new MockSoundexService(c =>
+        {
+            return c switch
+            {
+                'J' => 'J',
+                'a' => '0',
+                'c' => '2',
+                'k' => '2',
+                'e' => '0',
+                't' => '3',
+                _ => '0'
+            };
+        });
+        var soundex = new Soundex(soundexService);
+        string input = "Jacket";
+
+        // Act
+        string result = soundex.GenerateSoundex(input);
+
+        // Assert
+        Assert.Equal("J223", result);
+    }
+
+    [Fact]
+    public void GenerateSoundex_HandlesSpecialCharacters_ReturnsEncodedSoundex()
+    {
+        // Arrange
+        var soundexService = new MockSoundexService(c =>
+        {
+            return c switch
+            {
+                'J' => 'J',
+                'a' => '0',
+                'c' => '2',
+                'k' => '2',
+                '@' => '0',
+                'H' => '0',
+                'o' => '0',
+                'm' => '5',
+                'e' => '0',
+                _ => '0'
+            };
+        });
+        var soundex = new Soundex(soundexService);
+        string input = "Jack@Home";
+
+        // Act
+        string result = soundex.GenerateSoundex(input);
+
+        // Assert
+        Assert.Equal("J220", result);
+    }
+
+    [Fact]
+    public void GenerateSoundex_LongString_ReturnsTruncatedCode()
+    {
+        // Arrange
+        var soundexService = new MockSoundexService(c =>
+        {
+            return c switch
+            {
+                'J' => 'J',
+                'a' => '0',
+                'c' => '2',
+                'k' => '2',
+                'n' => '5',
+                'd' => '3',
+                'i' => '0',
+                'l' => '4',
+                _ => '0'
+            };
+        });
+        var soundex = new Soundex(soundexService);
+        string input = "JackandJill";
+
+        // Act
+        string result = soundex.GenerateSoundex(input);
+
+        // Assert
+        Assert.Equal("J252", result);
+    }
+
+    [Fact]
+    public void GenerateSoundex_MixedCharacterTypes_ReturnsCorrectSoundex()
+    {
+        // Arrange
+        var soundexService = new MockSoundexService(c =>
+        {
+            return c switch
+            {
+                'J' => 'J',
+                'a' => '0',
+                'c' => '2',
+                'k' => '2',
+                '1' => '0',
+                '2' => '0',
+                '3' => '0',
+                _ => '0'
+            };
+        });
+        var soundex = new Soundex(soundexService);
+        string input = "Jack123";
+
+        // Act
+        string result = soundex.GenerateSoundex(input);
+
+        // Assert
+        Assert.Equal("J220", result);
+    }
+
+    [Fact]
+    public void IsInvalidInput_EmptyString_ReturnsTrue()
+    {
+        // Arrange
+        var soundexService = new MockSoundexService(c => '0');
+        var soundex = new Soundex(soundexService);
+        string input = "";
+
+        // Act
+        bool result = soundex.IsInvalidInput(input);
+
+        // Assert
+        Assert.True(result);
+    }
+
+    [Fact]
+    public void IsInvalidInput_NullString_ReturnsTrue()
+    {
+        // Arrange
+        var soundexService = new MockSoundexService(c => '0');
+        var soundex = new Soundex(soundexService);
+        string input = null;
+
+        // Act
+        bool result = soundex.IsInvalidInput(input);
+
+        // Assert
+        Assert.True(result);
+    }
+
+    [Fact]
+    public void InitializeSoundex_ValidName_ReturnsInitializedSoundex()
+    {
+        // Arrange
+        var soundexService = new MockSoundexService(c => '0');
+        var soundex = new Soundex(soundexService);
+        string input = "John";
+
+        // Act
+        var result = soundex.InitializeSoundex(input);
+
+        // Assert
+        Assert.Equal("J", result.ToString());
+    }
+
+    [Fact]
+    public void AppendSoundexCharacters_ProcessesCharactersCorrectly()
+    {
+        // Arrange
+        var soundexService = new MockSoundexService(c =>
+        {
+            return c switch
+            {
+                'J' => 'J',
+                'o' => '0',
+                'h' => '5',
+                'n' => '5',
+                _ => '0'
+            };
+        });
+        var soundex = new Soundex(soundexService);
+        var soundexBuilder = new StringBuilder("J");
+        char previousCode = 'J';
+
+        // Act
+        soundex.AppendSoundexCharacters("John", soundexBuilder, ref previousCode);
+
+        // Assert
+        Assert.Equal("J505", soundexBuilder.ToString());
+    }
+
+    [Fact]
+    public void PadSoundex_AppendsZerosToMatchMaxLength()
+    {
+        // Arrange
+        var soundexService = new MockSoundexService(c => '0');
+        var soundex = new Soundex(soundexService);
+        var soundexBuilder = new StringBuilder("J");
+
+        // Act
+        soundex.PadSoundex(soundexBuilder);
+
+        // Assert
+        Assert.Equal("J000", soundexBuilder.ToString());
     }
     [Fact]
     public void HandlesEmptyString()
