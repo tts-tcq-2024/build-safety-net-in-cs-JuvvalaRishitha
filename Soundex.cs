@@ -51,7 +51,7 @@ public static void SoundexCode(StringBuilder soundex)
         soundex.Append(0);
     }
 }
-private char GetSoundexCode(char character)
+public static char GetSoundexCode(char character)
 {
     character = char.ToUpper(character);
     return character switch
