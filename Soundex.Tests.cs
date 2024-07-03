@@ -144,7 +144,7 @@ public class SoundexTests
         var soundexBuilder = new StringBuilder("J");
 
         // Act
-        Soundex.SoundexCode(soundexBuilder);
+        Soundex.SoundexCode(ref soundexBuilder);
 
         // Assert
         Assert.Equal("J000", soundexBuilder.ToString());
