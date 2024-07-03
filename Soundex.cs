@@ -14,7 +14,7 @@ public static string GenerateSoundex(string name)
     char prevCode = GetSoundexCode(name[0]);
 
     AppendingSoundexCharacters(name, soundex, ref prevCode);
-    SoundexCode(soundex);
+    SoundexCode(ref soundex);
     return soundex.ToString();
 }
 
@@ -47,7 +47,7 @@ public static void Characters(char character, StringBuilder soundex, ref char pr
 }
 public static bool AppendCode(char code, char prevCode) => code != 0 && code != prevCode;
     
-public static void SoundexCode(StringBuilder soundex)
+public static void SoundexCode(ref StringBuilder soundex)
 {
     while (soundex.Length < 4)
     {
