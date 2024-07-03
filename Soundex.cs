@@ -13,7 +13,7 @@ public class Soundex
     char prevCode = GetSoundexCode(name[0]);
 
     AppendingSoundexCharacters(name, soundex, prevCode);
-    Soundex(soundex);
+    GenerateSoundex(soundex);
     return soundex.ToString();
 }
 
@@ -42,7 +42,7 @@ private void Characters(char character, StringBuilder soundex, char prevCode)
 }
 private bool AppendCode(char code, char prevCode) => code != 0 && code != prevCode;
     
-private void Soundex(StringBuilder soundex)
+private void GenerateSoundex(StringBuilder soundex)
 {
     while (soundex.Length < 4)
     {
