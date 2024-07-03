@@ -4,10 +4,10 @@ using System;
 public class SoundexTests
 {
 
-  public SoundexTests()
-  {
-      _soundex = new Soundex();
-  }
+   public SoundexTests()
+   {
+      var _soundex = new Soundex();
+   }
   
      [Fact]
     public void GenerateSoundex_EmptyString_ReturnsEmptyString()
