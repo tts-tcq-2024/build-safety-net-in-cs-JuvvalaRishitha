@@ -51,7 +51,7 @@ public static void SoundexCode(StringBuilder soundex)
 {
     while (soundex.Length < 4)
     {
-        soundex.Append(0);
+        soundex.Append('0');
     }
 }
 public static char GetSoundexCode(char character)
