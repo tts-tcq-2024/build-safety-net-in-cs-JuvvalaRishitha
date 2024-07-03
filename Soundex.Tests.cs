@@ -89,7 +89,7 @@ public class SoundexTests
         char prevCode = 'J';
 
         // Act
-        Soundex.AppendingSoundexCharacters("John", soundexBuilder, prevCode);
+        Soundex.AppendingSoundexCharacters("John", soundexBuilder, ref prevCode);
 
         // Assert
         Assert.Equal("J005", soundexBuilder.ToString()); // J -> J, o -> 0, h -> 0, n -> 5
@@ -103,7 +103,7 @@ public class SoundexTests
         char prevCode = 'J';
 
         // Act
-        Soundex.Characters('a', soundexBuilder, prevCode);
+        Soundex.Characters('a', soundexBuilder, ref prevCode);
 
         // Assert
         Assert.Equal("J0", soundexBuilder.ToString()); // Should append 0 for 'a'
