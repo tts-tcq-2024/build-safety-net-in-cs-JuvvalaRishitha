@@ -4,47 +4,25 @@ using Moq;
 
 public class SoundexTests
 {
-    private readonly Mock<ISoundexService> _mockSoundexService;
     private readonly Soundex _soundex;
 
     public SoundexTests()
     {
-        _mockSoundexService = new Mock<ISoundexService>();
-        _soundex = new Soundex(_mockSoundexService.Object);
+        _soundex = new Soundex();
     }
 
     [Theory]
-    [InlineData("Robert", 'R', "R163")]
-    [InlineData("Rupert", 'R', "R163")]
-    [InlineData("Rubin", 'R', "R150")]
-    [InlineData("Ashcraft", 'A', "A261")]
-    [InlineData("Ashcroft", 'A', "A261")]
-    [InlineData("Tymczak", 'T', "T522")]
-    [InlineData("Pfister", 'P', "P236")]
-    [InlineData("", ' ', "")]
-    [InlineData(null, ' ', "")]
-    public void GenerateSoundex_ValidAndInvalidInputs_ReturnsExpectedResults(string input, char firstCharCode, string expected)
+    [InlineData("Robert", "R163")]
+    [InlineData("Rupert", "R163")]
+    [InlineData("Rubin", "R150")]
+    [InlineData("Ashcraft", "A261")]
+    [InlineData("Ashcroft", "A261")]
+    [InlineData("Tymczak", "T522")]
+    [InlineData("Pfister", "P236")]
+    [InlineData("", "")]
+    [InlineData(null, "")]
+    public void GenerateSoundex_ValidAndInvalidInputs_ReturnsExpectedResults(string input, string expected)
     {
-        // Arrange
-        _mockSoundexService.Setup(s => s.GetSoundexCode(It.IsAny<char>())).Returns((char c) =>
-        {
-            return c switch
-            {
-                'B' or 'F' or 'P' or 'V' => '1',
-                'C' or 'G' or 'J' or 'K' or 'Q' or 'S' or 'X' or 'Z' => '2',
-                'D' or 'T' => '3',
-                'L' => '4',
-                'M' or 'N' => '5',
-                'R' => '6',
-                _ => '0'
-            };
-        });
-
-        if (!string.IsNullOrEmpty(input))
-        {
-            _mockSoundexService.Setup(s => s.GetSoundexCode(input[0])).Returns(_mockSoundexService.Object.GetSoundexCode(input[0]));
-        }
-
         // Act
         string result = _soundex.GenerateSoundex(input);
 
@@ -79,31 +57,11 @@ public class SoundexTests
     }
 
     [Theory]
-    [InlineData("B", 'B', "B000")]
-    [InlineData("Bo", 'B', "B000")]
-    [InlineData("Bob", 'B', "B100")]
-    public void GenerateSoundex_ShortNames_ReturnsExpectedResults(string input, char firstCharCode, string expected)
+    [InlineData("B", "B000")]
+    [InlineData("Bo", "B000")]
+    [InlineData("Bob", "B100")]
+    public void GenerateSoundex_ShortNames_ReturnsExpectedResults(string input, string expected)
     {
-        // Arrange
-        _mockSoundexService.Setup(s => s.GetSoundexCode(It.IsAny<char>())).Returns((char c) =>
-        {
-            return c switch
-            {
-                'B' or 'F' or 'P' or 'V' => '1',
-                'C' or 'G' or 'J' or 'K' or 'Q' or 'S' or 'X' or 'Z' => '2',
-                'D' or 'T' => '3',
-                'L' => '4',
-                'M' or 'N' => '5',
-                'R' => '6',
-                _ => '0'
-            };
-        });
-
-        if (!string.IsNullOrEmpty(input))
-        {
-            _mockSoundexService.Setup(s => s.GetSoundexCode(input[0])).Returns(_mockSoundexService.Object.GetSoundexCode(input[0]));
-        }
-
         // Act
         string result = _soundex.GenerateSoundex(input);
 
@@ -112,36 +70,16 @@ public class SoundexTests
     }
 
     [Theory]
-    [InlineData("A", 'A', "A000")]
-    [InlineData("E", 'E', "E000")]
-    [InlineData("I", 'I', "I000")]
-    [InlineData("O", 'O', "O000")]
-    [InlineData("U", 'U', "U000")]
-    [InlineData("H", 'H', "H000")]
-    [InlineData("W", 'W', "W000")]
-    [InlineData("Y", 'Y', "Y000")]
-    public void GenerateSoundex_SingleVowel_ReturnsExpectedResults(string input, char firstCharCode, string expected)
+    [InlineData("A", "A000")]
+    [InlineData("E", "E000")]
+    [InlineData("I", "I000")]
+    [InlineData("O", "O000")]
+    [InlineData("U", "U000")]
+    [InlineData("H", "H000")]
+    [InlineData("W", "W000")]
+    [InlineData("Y", "Y000")]
+    public void GenerateSoundex_SingleVowel_ReturnsExpectedResults(string input, string expected)
     {
-        // Arrange
-        _mockSoundexService.Setup(s => s.GetSoundexCode(It.IsAny<char>())).Returns((char c) =>
-        {
-            return c switch
-            {
-                'B' or 'F' or 'P' or 'V' => '1',
-                'C' or 'G' or 'J' or 'K' or 'Q' or 'S' or 'X' or 'Z' => '2',
-                'D' or 'T' => '3',
-                'L' => '4',
-                'M' or 'N' => '5',
-                'R' => '6',
-                _ => '0'
-            };
-        });
-
-        if (!string.IsNullOrEmpty(input))
-        {
-            _mockSoundexService.Setup(s => s.GetSoundexCode(input[0])).Returns(_mockSoundexService.Object.GetSoundexCode(input[0]));
-        }
-
         // Act
         string result = _soundex.GenerateSoundex(input);
 
@@ -150,34 +88,14 @@ public class SoundexTests
     }
 
     [Theory]
-    [InlineData("BFPV", 'B', "B110")]
-    [InlineData("CGJKQSXZ", 'C', "C220")]
-    [InlineData("DT", 'D', "D300")]
-    [InlineData("L", 'L', "L400")]
-    [InlineData("MN", 'M', "M500")]
-    [InlineData("R", 'R', "R600")]
-    public void GenerateSoundex_SameSoundexGroupLetters_ReturnsExpectedResults(string input, char firstCharCode, string expected)
+    [InlineData("BFPV", "B110")]
+    [InlineData("CGJKQSXZ", "C220")]
+    [InlineData("DT", "D300")]
+    [InlineData("L", "L400")]
+    [InlineData("MN", "M500")]
+    [InlineData("R", "R600")]
+    public void GenerateSoundex_SameSoundexGroupLetters_ReturnsExpectedResults(string input, string expected)
     {
-        // Arrange
-        _mockSoundexService.Setup(s => s.GetSoundexCode(It.IsAny<char>())).Returns((char c) =>
-        {
-            return c switch
-            {
-                'B' or 'F' or 'P' or 'V' => '1',
-                'C' or 'G' or 'J' or 'K' or 'Q' or 'S' or 'X' or 'Z' => '2',
-                'D' or 'T' => '3',
-                'L' => '4',
-                'M' or 'N' => '5',
-                'R' => '6',
-                _ => '0'
-            };
-        });
-
-        if (!string.IsNullOrEmpty(input))
-        {
-            _mockSoundexService.Setup(s => s.GetSoundexCode(input[0])).Returns(_mockSoundexService.Object.GetSoundexCode(input[0]));
-        }
-
         // Act
         string result = _soundex.GenerateSoundex(input);
 
@@ -186,30 +104,10 @@ public class SoundexTests
     }
 
     [Theory]
-    [InlineData("BCDL", 'B', "B234")]
-    [InlineData("BFGHJKL", 'B', "B245")]
-    public void GenerateSoundex_MixedLetters_ReturnsExpectedResults(string input, char firstCharCode, string expected)
+    [InlineData("BCDL", "B234")]
+    [InlineData("BFGHJKL", "B245")]
+    public void GenerateSoundex_MixedLetters_ReturnsExpectedResults(string input, string expected)
     {
-        // Arrange
-        _mockSoundexService.Setup(s => s.GetSoundexCode(It.IsAny<char>())).Returns((char c) =>
-        {
-            return c switch
-            {
-                'B' or 'F' or 'P' or 'V' => '1',
-                'C' or 'G' or 'J' or 'K' or 'Q' or 'S' or 'X' or 'Z' => '2',
-                'D' or 'T' => '3',
-                'L' => '4',
-                'M' or 'N' => '5',
-                'R' => '6',
-                _ => '0'
-            };
-        });
-
-        if (!string.IsNullOrEmpty(input))
-        {
-            _mockSoundexService.Setup(s => s.GetSoundexCode(input[0])).Returns(_mockSoundexService.Object.GetSoundexCode(input[0]));
-        }
-
         // Act
         string result = _soundex.GenerateSoundex(input);
 
@@ -218,30 +116,10 @@ public class SoundexTests
     }
 
     [Theory]
-    [InlineData("Bobbbyyyyyy", 'B', "B110")]
-    [InlineData("Ashcrofttttttt", 'A', "A261")]
-    public void GenerateSoundex_LongNames_ReturnsExpectedResults(string input, char firstCharCode, string expected)
+    [InlineData("Bobbbyyyyyy", "B110")]
+    [InlineData("Ashcrofttttttt", "A261")]
+    public void GenerateSoundex_LongNames_ReturnsExpectedResults(string input, string expected)
     {
-        // Arrange
-        _mockSoundexService.Setup(s => s.GetSoundexCode(It.IsAny<char>())).Returns((char c) =>
-        {
-            return c switch
-            {
-                'B' or 'F' or 'P' or 'V' => '1',
-                'C' or 'G' or 'J' or 'K' or 'Q' or 'S' or 'X' or 'Z' => '2',
-                'D' or 'T' => '3',
-                'L' => '4',
-                'M' or 'N' => '5',
-                'R' => '6',
-                _ => '0'
-            };
-        });
-
-        if (!string.IsNullOrEmpty(input))
-        {
-            _mockSoundexService.Setup(s => s.GetSoundexCode(input[0])).Returns(_mockSoundexService.Object.GetSoundexCode(input[0]));
-        }
-
         // Act
         string result = _soundex.GenerateSoundex(input);
 
@@ -250,31 +128,11 @@ public class SoundexTests
     }
 
     [Theory]
-    [InlineData("O'Malley", 'O', "O540")]
-    [InlineData("D'Angelo", 'D', "D524")]
-    [InlineData("McDonald", 'M', "M235")]
-    public void GenerateSoundex_NamesWithApostrophes_ReturnsExpectedResults(string input, char firstCharCode, string expected)
+    [InlineData("O'Malley", "O540")]
+    [InlineData("D'Angelo", "D524")]
+    [InlineData("McDonald", "M235")]
+    public void GenerateSoundex_NamesWithApostrophes_ReturnsExpectedResults(string input, string expected)
     {
-        // Arrange
-        _mockSoundexService.Setup(s => s.GetSoundexCode(It.IsAny<char>())).Returns((char c) =>
-        {
-            return c switch
-            {
-                'B' or 'F' or 'P' or 'V' => '1',
-                'C' or 'G' or 'J' or 'K' or 'Q' or 'S' or 'X' or 'Z' => '2',
-                'D' or 'T' => '3',
-                'L' => '4',
-                'M' or 'N' => '5',
-                'R' => '6',
-                _ => '0'
-            };
-        });
-
-        if (!string.IsNullOrEmpty(input))
-        {
-            _mockSoundexService.Setup(s => s.GetSoundexCode(input[0])).Returns(_mockSoundexService.Object.GetSoundexCode(input[0]));
-        }
-
         // Act
         string result = _soundex.GenerateSoundex(input);
 
@@ -283,35 +141,15 @@ public class SoundexTests
     }
 
     [Theory]
-    [InlineData("Washington", 'W', "W252")]
-    [InlineData("Lee", 'L', "L000")]
-    [InlineData("Gutierrez", 'G', "G362")]
-    [InlineData("Pfister", 'P', "P236")]
-    [InlineData("Jackson", 'J', "J250")]
-    [InlineData("Tymczak", 'T', "T522")]
-    [InlineData("Van", 'V', "V500")]
-    public void GenerateSoundex_VariousNames_ReturnsExpectedResults(string input, char firstCharCode, string expected)
+    [InlineData("Washington", "W252")]
+    [InlineData("Lee", "L000")]
+    [InlineData("Gutierrez", "G362")]
+    [InlineData("Pfister", "P236")]
+    [InlineData("Jackson", "J250")]
+    [InlineData("Tymczak", "T522")]
+    [InlineData("Van", "V500")]
+    public void GenerateSoundex_VariousNames_ReturnsExpectedResults(string input, string expected)
     {
-        // Arrange
-        _mockSoundexService.Setup(s => s.GetSoundexCode(It.IsAny<char>())).Returns((char c) =>
-        {
-            return c switch
-            {
-                'B' or 'F' or 'P' or 'V' => '1',
-                'C' or 'G' or 'J' or 'K' or 'Q' or 'S' or 'X' or 'Z' => '2',
-                'D' or 'T' => '3',
-                'L' => '4',
-                'M' or 'N' => '5',
-                'R' => '6',
-                _ => '0'
-            };
-        });
-
-        if (!string.IsNullOrEmpty(input))
-        {
-            _mockSoundexService.Setup(s => s.GetSoundexCode(input[0])).Returns(_mockSoundexService.Object.GetSoundexCode(input[0]));
-        }
-
         // Act
         string result = _soundex.GenerateSoundex(input);
 
@@ -320,31 +158,11 @@ public class SoundexTests
     }
 
     [Theory]
-    [InlineData("Robert ", 'R', "R163")]
-    [InlineData("  Rupert", 'R', "R163")]
-    [InlineData("  Rubin  ", 'R', "R150")]
-    public void GenerateSoundex_NamesWithLeadingTrailingSpaces_ReturnsExpectedResults(string input, char firstCharCode, string expected)
+    [InlineData("Robert ", "R163")]
+    [InlineData("  Rupert", "R163")]
+    [InlineData("  Rubin  ", "R150")]
+    public void GenerateSoundex_NamesWithLeadingTrailingSpaces_ReturnsExpectedResults(string input, string expected)
     {
-        // Arrange
-        _mockSoundexService.Setup(s => s.GetSoundexCode(It.IsAny<char>())).Returns((char c) =>
-        {
-            return c switch
-            {
-                'B' or 'F' or 'P' or 'V' => '1',
-                'C' or 'G' or 'J' or 'K' or 'Q' or 'S' or 'X' or 'Z' => '2',
-                'D' or 'T' => '3',
-                'L' => '4',
-                'M' or 'N' => '5',
-                'R' => '6',
-                _ => '0'
-            };
-        });
-
-        if (!string.IsNullOrEmpty(input))
-        {
-            _mockSoundexService.Setup(s => s.GetSoundexCode(input[0])).Returns(_mockSoundexService.Object.GetSoundexCode(input[0]));
-        }
-
         // Act
         string result = _soundex.GenerateSoundex(input.Trim());
 
@@ -353,35 +171,29 @@ public class SoundexTests
     }
 
     [Theory]
-    [InlineData("Smith", 'S', "S530")]
-    [InlineData("Smythe", 'S', "S530")]
-    public void GenerateSoundex_EqualSoundexDifferentNames_ReturnsSameSoundexCode(string input, char firstCharCode, string expected)
+    [InlineData("Smith", "S530")]
+    [InlineData("Smythe", "S530")]
+    public void GenerateSoundex_EqualSoundexDifferentNames_ReturnsSameSoundexCode(string input, string expected)
     {
-        // Arrange
-        _mockSoundexService.Setup(s => s.GetSoundexCode(It.IsAny<char>())).Returns((char c) =>
-        {
-            return c switch
-            {
-                'B' or 'F' or 'P' or 'V' => '1',
-                'C' or 'G' or 'J' or 'K' or 'Q' or 'S' or 'X' or 'Z' => '2',
-                'D' or 'T' => '3',
-                'L' => '4',
-                'M' or 'N' => '5',
-                'R' => '6',
-                _ => '0'
-            };
-        });
-
-        if (!string.IsNullOrEmpty(input))
-        {
-            _mockSoundexService.Setup(s => s.GetSoundexCode(input[0])).Returns(_mockSoundexService.Object.GetSoundexCode(input[0]));
-        }
-
         // Act
         string result = _soundex.GenerateSoundex(input);
 
         // Assert
         Assert.Equal(expected, result);
+    }
+
+    [Theory]
+    [InlineData("Robert", "R163", "Rupert", "R163")]
+    [InlineData("Rubin", "R150", "Ruben", "R150")]
+    public void GenerateSoundex_CompareNamesWithSameSoundex(string name1, string expected1, string name2, string expected2)
+    {
+        // Act
+        string result1 = _soundex.GenerateSoundex(name1);
+        string result2 = _soundex.GenerateSoundex(name2);
+
+        // Assert
+        Assert.Equal(expected1, result1);
+        Assert.Equal(expected2, result2);
     }
 
     [Fact]
@@ -401,13 +213,26 @@ public class SoundexTests
     public void GenerateSoundex_HandlesRepeatingCharacters()
     {
         // Arrange
-        string input = "Tymczak";
+        string input = "Bbbbbb";
 
         // Act
         string result = _soundex.GenerateSoundex(input);
 
         // Assert
-        Assert.Equal("T522", result);
+        Assert.Equal("B000", result);
+    }
+
+    [Fact]
+    public void GenerateSoundex_NamesWithNonAlphabetCharacters_ReturnsExpectedResults()
+    {
+        // Arrange
+        string input = "R0b3rt!";
+
+        // Act
+        string result = _soundex.GenerateSoundex(input);
+
+        // Assert
+        Assert.Equal("R163", result);
     }
     [Fact]
     public void HandlesEmptyString()
