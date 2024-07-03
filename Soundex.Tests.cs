@@ -1,6 +1,6 @@
 using Xunit;
 using System;
-
+using System.Text;
 public class SoundexTests
 {
   private readonly Soundex _soundex;
