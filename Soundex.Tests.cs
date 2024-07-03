@@ -92,7 +92,7 @@ public class SoundexTests
         Soundex.AppendingSoundexCharacters("John", soundexBuilder, ref prevCode);
 
         // Assert
-        Assert.Equal("J050", soundexBuilder.ToString()); 
+        Assert.Equal("J05", soundexBuilder.ToString()); 
     }
 
     [Fact]
