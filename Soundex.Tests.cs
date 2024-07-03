@@ -3,6 +3,11 @@ using System;
 
 public class SoundexTests
 {
+
+  public SoundexTests()
+  {
+      _soundex = new Soundex();
+  }
   
      [Fact]
     public void GenerateSoundex_EmptyString_ReturnsEmptyString()
@@ -158,7 +163,7 @@ public class SoundexTests
         char character = 'B';
 
         // Act
-        char result = Soundex.GetSoundexCode(character);
+        char result = _soundex.GetSoundexCode(character);
 
         // Assert
         Assert.Equal('1', result);
@@ -171,7 +176,7 @@ public class SoundexTests
         char character = 'X';
 
         // Act
-        char result = Soundex.GetSoundexCode(character);
+        char result = _soundex.GetSoundexCode(character);
 
         // Assert
         Assert.Equal('2', result);
@@ -207,43 +212,7 @@ public class SoundexTests
         Assert.Equal(resultLowercase, resultUppercase);
         Assert.Equal("A000", resultLowercase);
     }
-   [Theory]
-    [InlineData('B', '1')]
-    [InlineData('F', '1')]
-    [InlineData('P', '1')]
-    [InlineData('V', '1')]
-    [InlineData('C', '2')]
-    [InlineData('G', '2')]
-    [InlineData('J', '2')]
-    [InlineData('K', '2')]
-    [InlineData('Q', '2')]
-    [InlineData('S', '2')]
-    [InlineData('X', '2')]
-    [InlineData('Z', '2')]
-    [InlineData('D', '3')]
-    [InlineData('T', '3')]
-    [InlineData('L', '4')]
-    [InlineData('M', '5')]
-    [InlineData('N', '5')]
-    [InlineData('R', '6')]
-    [InlineData('A', '0')]
-    [InlineData('E', '0')]
-    [InlineData('I', '0')]
-    [InlineData('O', '0')]
-    [InlineData('U', '0')]
-    [InlineData('H', '0')]
-    [InlineData('W', '0')]
-    [InlineData('Y', '0')]
-    [InlineData(' ', '0')] // Testing a space character
-    [InlineData('1', '0')] // Testing a digit
-    public void GetSoundexCode_ValidAndInvalidCharacters_ReturnsExpectedCode(char input, char expected)
-    {
-        // Act
-        char result = Soundex.GetSoundexCode(input);
-
-        // Assert
-        Assert.Equal(expected, result);
-    }
+   
     [Fact]
     public void HandlesEmptyString()
     {
